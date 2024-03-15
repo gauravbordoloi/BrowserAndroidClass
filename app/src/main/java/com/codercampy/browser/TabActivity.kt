@@ -34,7 +34,16 @@ class TabActivity : AppCompatActivity() {
         binding = ActivityTabBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadHome()
+        val url = intent.getStringExtra("url")
+        val openKeyboard = intent.getBooleanExtra("open_keyboard", false)
+
+        if (!url.isNullOrEmpty()) {
+            loadUrl(url)
+        } else if (openKeyboard) {
+            binding.editText.requestFocus()
+        } else {
+            loadHome()
+        }
 
         initWebView()
         initBackPress()
@@ -46,6 +55,11 @@ class TabActivity : AppCompatActivity() {
     private fun loadHome() {
         binding.webView.clearHistory()
         binding.webView.loadUrl("https://google.com")
+    }
+
+    private fun loadUrl(url: String) {
+        binding.webView.clearHistory()
+        binding.webView.loadUrl(url)
     }
 
     private fun initButtons() {
@@ -256,6 +270,7 @@ class TabActivity : AppCompatActivity() {
                         0, 0, 0, 0
                     )
                 }
+
             }
 
         }
